@@ -2,7 +2,7 @@
 
 A local AI-powered symptom triage demo built for the [UCSC OSPO 2026 GSoC project](https://ucsc-ospo.github.io/project/osre26/nelbl/neurohealth/).
 
-Describe your symptoms, get an urgency assessment - ER, doctor visit, or self-care, grounded in MedlinePlus medical knowledge.
+This project explores how Large Language Models can be used to build intelligent, conversational health assistants that interpret symptoms, assess urgency, and guide users toward appropriate care.
 
 
 <p align="center">
@@ -13,11 +13,16 @@ Describe your symptoms, get an urgency assessment - ER, doctor visit, or self-ca
 </p>
 
 
-## How it works
+## What this demo does
 
-User describes symptoms in plain language. A local knowledge base of MedlinePlus entries is searched for matching context, which gets injected into the prompt alongside the symptoms. Llama3 returns a structured JSON assessment and the UI renders urgency level, reasoning, and next steps.
+A user describes their symptoms in plain language. The application retrieves relevant clinical context from a local knowledge base of MedlinePlus entries, injects that context into the prompt, and sends both to a locally running Llama3 model via Ollama. The model returns a structured assessment including urgency level, reasoning, and recommended next steps, which is rendered in the interface.
 
-This is a minimal RAG pipeline running entirely on your machine. No cloud APIs, no data leaves your device.
+This implements a minimal Retrieval-Augmented Generation (RAG) pipeline. Rather than relying solely on the model's training data, responses are grounded in validated medical information retrieved at query time. The entire pipeline runs on the user's machine. No data is sent to external servers.
+
+## Relation to the OSPO project
+
+The [NeuroHealth OSPO project](https://ucsc-ospo.github.io/project/osre26/nelbl/neurohealth/) proposes building a full AI-powered health assistant with LLM-based medical reasoning, RAG over clinical knowledge bases, multi-turn dialogue, urgency assessment, and appointment routing. This demo implements a focused slice of that vision: symptom input, knowledge retrieval, and urgency triage as a proof of concept for the broader agenda.
+
 
 ## Setup
 
