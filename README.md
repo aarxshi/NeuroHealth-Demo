@@ -2,17 +2,22 @@
 
 A local AI-powered symptom triage demo built for the [UCSC OSPO 2026 GSoC project](https://ucsc-ospo.github.io/project/osre26/nelbl/neurohealth/).
 
-Describe your symptoms, get an urgency assessment — ER, doctor visit, or self-care — grounded in MedlinePlus medical knowledge.
+Describe your symptoms, get an urgency assessment - ER, doctor visit, or self-care, grounded in MedlinePlus medical knowledge.
+
+
+<p align="center">
+<img src="demo/ui.png" width="700">
+</p>
+<p align="center">
+<img src="demo/example.png" width="700">
+</p>
+
 
 ## How it works
 
-1. User describes symptoms in plain language
-2. A local knowledge base (MedlinePlus entries) is searched for matching context
-3. Relevant context is injected into the prompt alongside the symptoms
-4. Llama3 returns a structured JSON assessment
-5. The UI renders urgency level, reasoning, and next steps
+User describes symptoms in plain language. A local knowledge base of MedlinePlus entries is searched for matching context, which gets injected into the prompt alongside the symptoms. Llama3 returns a structured JSON assessment and the UI renders urgency level, reasoning, and next steps.
 
-This is a minimal RAG (Retrieval-Augmented Generation) pipeline running entirely on your machine — no cloud APIs, no data leaves your device.
+This is a minimal RAG pipeline running entirely on your machine. No cloud APIs, no data leaves your device.
 
 ## Setup
 
@@ -37,7 +42,7 @@ npx serve .
 python -m http.server 8000
 ```
 
-Open `http://localhost:3000` in your browser.
+Open `http://localhost:3000`.
 
 ## Stack
 
@@ -45,13 +50,9 @@ Open `http://localhost:3000` in your browser.
 - **Retrieval**: keyword-matched local knowledge base (MedlinePlus)
 - **Frontend**: vanilla HTML/CSS/JS, single file, zero dependencies
 
-## Roadmap
+## About
 
-- [ ] Semantic search over a larger knowledge base (embeddings)
-- [ ] Multi-turn conversation with clarifying questions
-- [ ] Appointment routing suggestions
-- [ ] Streaming responses
-- [ ] Clinical safety evaluation
+This demo was built as part of a GSoC 2026 application for the [NeuroHealth project](https://ucsc-ospo.github.io/project/osre26/nelbl/neurohealth/) at UCSC OSPO, mentored by Linsey Pang and Bin Dong.
 
 ## Disclaimer
 
