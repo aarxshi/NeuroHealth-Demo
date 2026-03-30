@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NeuroHealth</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --w: #ffffff;
+  --k: #0a0a0a;
+  --g: #767676;
+  --l: #e8e8e8;
+  --er: #c0392b;
+  --soon: #b7710a;
+  --self: #1a7a4a;
+}
+
+body {
+  font-family: 'Instrument Sans';
+  background: var(--w);
+  color: var(--k);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  padding: 2rem 2.5rem 1.5rem;
+  border-bottom: 1px solid var(--l);
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+}
+
+.wordmark {
+  font-size: 0.8rem;
+  font-weight: bold;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.tagline {
+  font-size: 0.7rem;
+  color: var(--g);
+  letter-spacing: 0.05em;
+}
+
+main {
+  flex: 1;
+  max-width: 560px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 4rem 2rem 3rem;
+}
+
+h1 {
+  font-size: 1.05rem;
+  font-weight: normal;
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+  color: var(--g);
+}
+
+h1 strong {
+  color: var(--k);
+  font-weight: bold;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 1.25rem;
+}
+
+.chip {
+  font-family: inherit;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  color: var(--g);
+  background: none;
+  border: 1px solid var(--l);
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: border-color 0.1s, color 0.1s;
+}
+
+.chip:hover {
+  border-color: var(--k);
+  color: var(--k);
+}
+
+textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: var(--k);
+  background: var(--w);
+  border: 1px solid var(--l);
+  border-top: 2px solid var(--k);
+  padding: 14px;
+  resize: vertical;
+  min-height: 110px;
+  line-height: 1.7;
+  transition: border-color 0.15s;
+  outline: none;
+}
+
+textarea::placeholder { color: var(--g); }
+textarea:focus { border-color: var(--k); }
+
+.row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.hint {
+  font-size: 0.65rem;
+  color: var(--g);
+  letter-spacing: 0.04em;
+}
+
+button.submit {
+  font-family: inherit;
+  font-size: 0.7rem;
+  font-weight: bold;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--w);
+  background: var(--k);
+  border: none;
+  padding: 10px 22px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: opacity 0.15s;
+}
+
+button.submit:hover   { opacity: 0.8; }
+button.submit:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.spinner {
+  width: 10px; height: 10px;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.hidden { display: none !important; }
+
+#result { margin-top: 2.5rem; }
+
+.result-block { animation: fade 0.25s ease; }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+.urgency-line {
+  font-size: 0.7rem;
+  font-weight: bold;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--l);
+}
+
+.urgency-line.er   { color: var(--er); }
+.urgency-line.soon { color: var(--soon); }
+.urgency-line.self { color: var(--self); }
+
+.urgency-line::before {
+  content: '';
+  display: block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.field { margin-bottom: 1.5rem; }
+
+.field-label {
+  font-size: 0.62rem;
+  font-weight: bold;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--g);
+  margin-bottom: 0.5rem;
+}
+
+.field-value {
+  font-size: 0.82rem;
+  line-height: 1.75;
+  color: var(--k);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.tag {
+  font-size: 0.65rem;
+  letter-spacing: 0.04em;
+  padding: 3px 9px;
+  border: 1px solid var(--l);
+  color: var(--g);
+}
+
+.disc {
+  font-size: 0.65rem;
+  color: var(--g);
+  line-height: 1.6;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--l);
+  margin-top: 1rem;
+}
+
+.err-block {
+  font-size: 0.78rem;
+  line-height: 1.75;
+  color: var(--er);
+  border-left: 2px solid var(--er);
+  padding-left: 1rem;
+  animation: fade 0.25s ease;
+}
+
+.err-block code {
+  font-family: inherit;
+  background: #fdf2f0;
+  padding: 1px 5px;
+}
+
+footer {
+  padding: 1.5rem 2.5rem;
+  border-top: 1px solid var(--l);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+footer span {
+  font-size: 0.65rem;
+  color: var(--g);
+  letter-spacing: 0.03em;
+}
+
+footer a { color: var(--g); text-decoration: underline; }
+footer a:hover { color: var(--k); }
+
+@media (max-width: 520px) {
+  header { padding: 1.25rem; }
+  main { padding: 2.5rem 1.25rem 2rem; }
+  footer { padding: 1rem 1.25rem; flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <span class="wordmark">NeuroHealth</span>
+  <span class="tagline">· llama3 · local</span>
+</header>
+
+<main>
+  <h1>How are you feeling?<br><strong>Get an urgency assessment</strong></h1>
+
+  <div class="chips">
+    <button class="chip" onclick="fill('Chest pain and shortness of breath for the past hour')">chest pain</button>
+    <button class="chip" onclick="fill('Mild sore throat for 2 days, no fever')">sore throat</button>
+    <button class="chip" onclick="fill('Sudden severe headache, worst of my life')">severe headache</button>
+    <button class="chip" onclick="fill('Twisted ankle, swollen but I can walk')">sprained ankle</button>
+  </div>
+
+  <textarea id="symptoms" placeholder="e.g. throbbing headache and mild fever since yesterday…"></textarea>
+
+  <div class="row">
+    <button class="submit" id="btn" onclick="triage()">
+      <span id="btn-label">Assess</span>
+      <svg id="btn-icon" width="12" height="12" viewBox="0 0 16 16" fill="none">
+        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span id="btn-spin" class="spinner hidden"></span>
+    </button>
+  </div>
+
+  <div id="result"></div>
+</main>
+
+<footer>
+  <span>GSoC '26 Demo · <a href="https://ucsc-ospo.github.io/project/osre26/nelbl/neurohealth/" target="_blank">UCSC OSPO 2026</a></span>
+</footer>
+
+<script>
+const KB = [
+  { keywords: ['chest pain','chest tightness','chest pressure'], source: 'MedlinePlus: Chest Pain', info: 'Chest pain can signal a heart attack, angina, or pulmonary embolism. Seek emergency care immediately if accompanied by shortness of breath, sweating, or arm/jaw pain.' },
+  { keywords: ["shortness of breath","can't breathe",'difficulty breathing','breathless'], source: 'MedlinePlus: Breathing Difficulty', info: 'Sudden difficulty breathing may indicate a cardiac or pulmonary emergency. If severe or combined with chest pain, call emergency services immediately.' },
+  { keywords: ['headache','head pain','migraine'], source: 'MedlinePlus: Headache', info: 'Most headaches are tension-type or migraines. A sudden severe "thunderclap" headache may indicate a subarachnoid hemorrhage and requires emergency care.' },
+  { keywords: ['fever','high temperature','chills'], source: 'MedlinePlus: Fever', info: 'Fever above 39.4°C in adults warrants medical attention. Fever with stiff neck, rash, or confusion may indicate meningitis — seek emergency care.' },
+  { keywords: ['sore throat','throat pain','difficulty swallowing'], source: 'MedlinePlus: Sore Throat', info: 'Most sore throats are viral and resolve in 7–10 days. Severe difficulty swallowing or breathing warrants urgent care.' },
+  { keywords: ['stomach pain','abdominal pain','belly pain','stomach ache'], source: 'MedlinePlus: Abdominal Pain', info: 'Sudden severe abdominal pain may indicate appendicitis or other surgical emergencies.' },
+  { keywords: ['ankle','sprain','twisted','swollen foot'], source: 'MedlinePlus: Sprains', info: 'Most ankle sprains heal with RICE: Rest, Ice, Compression, Elevation. Inability to bear weight may indicate a fracture.' },
+  { keywords: ['dizziness','dizzy','lightheaded','vertigo'], source: 'MedlinePlus: Dizziness', info: 'Dizziness with sudden severe headache, vision changes, or facial drooping may indicate stroke — call emergency services.' },
+  { keywords: ['rash','skin rash','hives','itching'], source: 'MedlinePlus: Rashes', info: 'A rash with difficulty breathing indicates anaphylaxis — a medical emergency. A non-blanching purplish rash with fever may indicate meningococcal disease.' },
+  { keywords: ['nausea','vomiting','throwing up'], source: 'MedlinePlus: Nausea and Vomiting', info: 'Persistent vomiting with severe abdominal pain or signs of dehydration warrants medical evaluation.' },
+  { keywords: ['cough','coughing'], source: 'MedlinePlus: Cough', info: 'A cough lasting more than 3 weeks should be evaluated. Coughing blood always warrants prompt medical attention.' },
+  { keywords: ['back pain','lower back','backache'], source: 'MedlinePlus: Back Pain', info: 'Back pain with loss of bladder/bowel control or leg weakness may indicate cauda equina syndrome — a surgical emergency.' },
+  { keywords: ['allergy','allergic','anaphylaxis'], source: 'MedlinePlus: Allergic Reactions', info: 'Severe allergic reactions with throat swelling or difficulty breathing are life-threatening. Use epinephrine if available and call emergency services.' },
+  { keywords: ['burn','burned','scalded'], source: 'MedlinePlus: Burns', info: 'Burns on face/hands/genitals or covering large areas require emergency care. Run cool water over minor burns for 10–20 minutes.' },
+  { keywords: ['cut','bleeding','wound','laceration'], source: 'MedlinePlus: Bleeding', info: 'Apply firm direct pressure to control bleeding. Seek emergency care if bleeding does not stop within 10–15 minutes.' },
+];
+
+function retrieve(text) {
+  const lower = text.toLowerCase();
+  return KB.filter(e => e.keywords.some(k => lower.includes(k)));
+}
+
+const SYSTEM = `You are NeuroHealth, an AI health triage assistant.
+Respond ONLY with a JSON object — no markdown, no extra text.
+{
+  "urgency": "ER" | "SOON" | "SELF",
+  "urgency_label": "Go to the ER now" | "See a doctor soon" | "Self-care at home",
+  "summary": "one sentence under 30 words",
+  "reasoning": "2-3 sentences",
+  "symptoms_noted": ["array", "of", "symptoms"],
+  "next_steps": "2-3 sentence recommendation"
+}
+ER = life-threatening. SOON = doctor in 1-3 days. SELF = minor. Err on the side of caution.`;
+
+function fill(t) {
+  document.getElementById('symptoms').value = t;
+  document.getElementById('symptoms').focus();
+}
+
+document.getElementById('symptoms').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.ctrlKey) triage();
+});
+
+async function triage() {
+  const text = document.getElementById('symptoms').value.trim();
+  if (!text) return;
+  setLoading(true);
+  document.getElementById('result').innerHTML = '';
+  const hits = retrieve(text);
+  const context = hits.length
+    ? '\n\nRelevant medical context:\n' + hits.map(h => `- ${h.info}`).join('\n')
+    : '';
+  try {
+    const res = await fetch('http://localhost:11434/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'llama3:latest',
+        stream: false,
+        messages: [
+          { role: 'system', content: SYSTEM },
+          { role: 'user', content: 'Patient symptoms: ' + text + context }
+        ]
+      })
+    });
+    if (!res.ok) throw new Error('Ollama returned ' + res.status);
+    const data = await res.json();
+    renderResult(parseJSON(data.message?.content ?? ''), hits);
+  } catch(err) {
+    renderError(err);
+  } finally {
+    setLoading(false);
+  }
+}
+
+function parseJSON(raw) {
+  const c = raw.replace(/```json|```/g, '').trim();
+  try { return JSON.parse(c); } catch(_) {}
+  const m = c.match(/\{[\s\S]*\}/);
+  if (m) return JSON.parse(m[0]);
+  throw new Error('Unexpected model response. Try again.');
+}
+
+function setLoading(on) {
+  document.getElementById('btn').disabled = on;
+  document.getElementById('btn-label').textContent = on ? 'Analyzing' : 'Assess';
+  document.getElementById('btn-icon').classList.toggle('hidden', on);
+  document.getElementById('btn-spin').classList.toggle('hidden', !on);
+}
+
+function renderResult(d, hits) {
+  const u = (d.urgency ?? 'SELF').toUpperCase();
+  const cls = { ER: 'er', SOON: 'soon', SELF: 'self' }[u] ?? 'self';
+  const tags = (d.symptoms_noted ?? []).map(s => `<span class="tag">${esc(s)}</span>`).join('');
+  const sources = hits.length
+    ? `<div class="field"><div class="field-label">Sources</div><div class="field-value">${hits.map(h => esc(h.source)).join('<br>')}</div></div>`
+    : '';
+  document.getElementById('result').innerHTML = `
+    <div class="result-block">
+      <div class="urgency-line ${cls}">${esc(d.urgency_label ?? u)}</div>
+      <div class="field">
+        <div class="field-label">Summary</div>
+        <div class="field-value">${esc(d.summary ?? '')}</div>
+      </div>
+      ${tags ? `<div class="field"><div class="field-label">Symptoms noted</div><div class="tags">${tags}</div></div>` : ''}
+      <div class="field">
+        <div class="field-label">Assessment</div>
+        <div class="field-value">${esc(d.reasoning ?? '')}</div>
+      </div>
+      <div class="field">
+        <div class="field-label">Next steps</div>
+        <div class="field-value">${esc(d.next_steps ?? '')}</div>
+      </div>
+      ${sources}
+      <div class="disc">AI-generated assessment grounded in MedlinePlus. Not a substitute for professional medical advice.</div>
+    </div>`;
+}
+
+function renderError(err) {
+  const cors = err.message.includes('Failed to fetch') || err.message.includes('NetworkError');
+  const msg = cors
+    ? `Cannot reach Ollama at <code>localhost:11434</code>.<br>Run <code>$env:OLLAMA_ORIGINS="*"; ollama serve</code> then serve this file with <code>npx serve .</code>`
+    : esc(err.message);
+  document.getElementById('result').innerHTML = `<div class="err-block">${msg}</div>`;
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
